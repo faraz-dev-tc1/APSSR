@@ -100,6 +100,10 @@ class ContentNormalizer:
 
     def _is_word_continuation(self, current: str, next_text: str) -> bool:
         """Check if next line continues a hyphenated word"""
+        # Check if current string is long enough
+        if len(current) < 2:
+            return False
+
         # Get the word fragment before hyphen
         last_word = current.split()[-1] if current.split() else ""
 
