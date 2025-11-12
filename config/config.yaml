@@ -1,0 +1,65 @@
+system:
+  name: "Automated Rulebook Consolidation System"
+  version: "1.0.0"
+
+gemini:
+  model: "gemini-2.0-flash-exp"
+  temperature: 0.1
+  max_tokens: 8000
+  top_p: 0.95
+  top_k: 40
+
+preprocessing:
+  min_text_length: 10
+  header_footer_threshold: 0.9
+  page_number_positions: ["bottom-left", "bottom-right", "bottom-center"]
+
+reconstruction:
+  rule_pattern: "Rule\\s+[0-9A-Z]+"
+  go_pattern: "G\\.O\\.Ms\\.No\\.\\s*\\d+"
+  continuation_threshold: 0.15
+  min_font_size_diff: 2.0
+
+segmentation:
+  transition_keywords:
+    - "G.O.Ms.No"
+    - "ABSTRACT"
+    - "Government Order"
+  amendment_verbs:
+    - "substitute"
+    - "insert"
+    - "omit"
+    - "delete"
+    - "add"
+    - "replace"
+
+extraction:
+  action_types:
+    - "SUBSTITUTE"
+    - "OMIT"
+    - "INSERT"
+    - "RENUMBER"
+  date_formats:
+    - "%d-%m-%Y"
+    - "%d/%m/%Y"
+    - "%Y-%m-%d"
+    - "%d.%m.%Y"
+
+consolidation:
+  numbering_conventions:
+    after_rule: ["A", "B", "C", "D"]
+    after_clause: ["-1", "-2", "-3"]
+  conflict_resolution: "chronological"
+
+validation:
+  structural_match_threshold: 0.95
+  content_fidelity_threshold: 0.95
+  levenshtein_threshold: 0.05
+
+output:
+  formats:
+    - "json"
+    - "html"
+    - "pdf"
+  include_change_tracking: true
+  include_audit_trail: true
